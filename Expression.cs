@@ -3,7 +3,7 @@
 * 23 Jul 2004                                                                     Wfccm2 *
 *****************************************************************************************/
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -17,7 +17,9 @@ namespace Wfccm2
 	/// <remarks><pre>
 	/// 19 Jul 2004 - Jeremy Roberts
 	/// Takes a string and allow a user to add variables. Evaluates the string as a mathmatical function.
-	/// </pre></remarks>
+    /// 11 Jan 2006 - Will Gray
+    ///  - Added generic collection implementation.
+    /// </pre></remarks>
     [Serializable()]
 	public class Expression
 	{
@@ -29,9 +31,9 @@ namespace Wfccm2
         /// </pre></remarks>
         [Serializable()]
         public abstract class DynamicFunction
-        { 
-            public abstract double EvaluateD(Hashtable variables);
-            public abstract bool EvaluateB(Hashtable variables);
+        {
+            public abstract double EvaluateD(SortedDictionary<string, double> variables);
+            public abstract bool EvaluateB(SortedDictionary<string, double> variables);
         }
         protected DynamicFunction dynamicFunction;
         //protected AppDomain NewAppDomain;
@@ -51,7 +53,7 @@ namespace Wfccm2
 		/// </summary>
 		protected string inFunction = ""; // Infix function.
 		protected string postFunction = ""; // Postfix function.
-		protected Hashtable variables = new Hashtable();
+        protected SortedDictionary<string, double> variables = new SortedDictionary<string, double>();
 		protected const double TRUE = 1;
 		protected const double FALSE = 0;
         protected string[] splitPostFunction;
@@ -160,11 +162,11 @@ namespace Wfccm2
 
 			string[] inFix = func.Split(new char[]{' '});
 
-			Stack postFix = new Stack();
+            Stack<string> postFix = new Stack<string>();
 	
 			//			inFix = evaluateLogic(inFix);
 
-			Stack operators = new Stack();
+            Stack<string> operators = new Stack<string>();
 			string currOperator;
 
 			foreach (string token in inFix)
@@ -228,7 +230,8 @@ namespace Wfccm2
 
 			// Build the post fix string.
 			string psString = "";
-			foreach (string item in postFix){
+			foreach (string item in postFix)
+            {
 				psString = item + " " + psString;
 			}
 			psString = psString.Trim();
@@ -336,9 +339,7 @@ namespace Wfccm2
 				@"([<>=/*+-] -|^-) (\d+|[0-9]+[eE][+-]\d+)(\s|$)",
 				@"$1$2$3");
 
-
 			return function;
-
 		}
 
 		// Corrects for spaced function...
@@ -351,7 +352,7 @@ namespace Wfccm2
 		{
 			char[] ops = {'-','+'};
 			int n = function.IndexOfAny(ops,0);
-			while ( (n <= function.Length) && (n > -1) )
+			while ((n <= function.Length) && (n > -1))
 			{
 				//Console.Write(n + ": ");
 
@@ -367,11 +368,11 @@ namespace Wfccm2
 				//prevCut = n-2 <= 0 ? 0 : function.LastIndexOf(" ", n-2, n-2) + 1;
 				//prevSpace = function.LastIndexOf(" ", n-2, n-2);
 				
-				if (n+2 < function.Length)
+				if (n + 2 < function.Length)
 					nextCut = function.IndexOf(" ", n+2);
 				else 
 					nextCut = function.Length;
-				nextCut = nextCut == -1 ? function.Length : nextCut;
+				nextCut = (nextCut == -1 ? function.Length : nextCut);
 				
 				string checkMeSpace = function.Substring(prevCut, nextCut - prevCut);
 				string checkMe = checkMeSpace.Replace(" ", "");
@@ -397,8 +398,8 @@ namespace Wfccm2
 				n = function.IndexOfAny(ops,n+1);
 
 			}
-			return function;
 
+            return function;
 		}
 
 
@@ -611,7 +612,7 @@ namespace Wfccm2
             */
 		}
 
-		public ArrayList GetFunctionVariables()
+		public List<string> GetFunctionVariables()
 		{
 			// Check to see that the function is valid.
 			if (inFunction.Equals("") || inFunction == null)
@@ -624,7 +625,7 @@ namespace Wfccm2
 			string[] inFix = func.Split(new char[]{' '});
 
 			// The arraylist to return
-			ArrayList retVal = new ArrayList();
+            List<string> retVal = new List<string>();
 
 			// Check each token to see if its a variable.
 			foreach (string token in inFix)
@@ -711,12 +712,12 @@ namespace Wfccm2
 			// Check operators
 
 			// Create a temporary vector to hold the secondary stack.
-			Stack workstack = new Stack();
+            Stack<string> workstack = new Stack<string>();
 			func = this.Infix2Postfix(inFix).Split(new char[]{' '});
 
 			// loop through the postfix vector
 			string token = "";
-			for (int i = 0; i< func.Length; i++)
+			for (int i = 0; i < func.Length; i++)
 			{
 				token = (string) func[i];
 
@@ -790,7 +791,7 @@ namespace Wfccm2
 			// TODO! Check to see that we have the variable that we need.
 
 			// Create a temporary vector to hold the secondary stack.
-			Stack workstack = new Stack();
+            Stack<string> workstack = new Stack<string>();
 			string sLeft;
 			string sRight;
 			double dLeft = 0;
@@ -1002,7 +1003,7 @@ namespace Wfccm2
 			// TODO! Check to see that we have the variable that we need.
 
 			// Create a temporary vector to hold the secondary stack.
-			Stack workstack = new Stack();
+            Stack<string> workstack = new Stack<string>();
 			string sLeft = "";
 			string sRight = "";
 			string sResult = "";
@@ -1015,7 +1016,7 @@ namespace Wfccm2
 
 			// loop through the postfix vector
 			string token = "";
-			for (int i = 0; i< func.Length;i++)
+			for (int i = 0; i < func.Length;i++)
 			{
 				token = (string) func[i];
 
@@ -1253,7 +1254,7 @@ namespace Wfccm2
 
             // Define "EvaluateD" function.
             //
-            Type[] args = { typeof(Hashtable) };
+            Type[] args = { typeof(SortedDictionary<string, double>) };
             MethodBuilder evalMethodD = dynamicFunctionClass.DefineMethod(
                 "EvaluateD",
                 MethodAttributes.Public | MethodAttributes.Virtual,
