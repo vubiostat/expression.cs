@@ -188,7 +188,7 @@ namespace Wfccm2
 				{
 			
 					// pop the operatorVector and store operator
-					currOperator = (string) operators.Pop();
+					currOperator = operators.Pop();
 
 					// while operator is not a "("
 					while (currOperator != "(")
@@ -196,7 +196,7 @@ namespace Wfccm2
 						// push the operator on the postfixVector
 						postFix.Push(currOperator);
 						// pop the operatorVector and store operator
-						currOperator = (string) operators.Pop();
+						currOperator = operators.Pop();
 					}
 				}
 					// If the token is an operator
@@ -205,10 +205,10 @@ namespace Wfccm2
 					// while precedence of the operator is <= precedence of the token 
 					while (operators.Count > 0)
 					{
-						if (this.GetPrecedence(token) <= this.GetPrecedence((string) operators.Peek()))
+						if (this.GetPrecedence(token) <= this.GetPrecedence(operators.Peek()))
 						{
 							// pop the operatorVector and store operator
-							currOperator = (string) operators.Pop();
+							currOperator = operators.Pop();
 							//push operator on the postfix vector
 							postFix.Push(currOperator);
 						}
@@ -223,7 +223,7 @@ namespace Wfccm2
 			while (operators.Count > 0)
 			{
 				// pop the operatorVector and store operator
-				currOperator = (string) operators.Pop();
+				currOperator = operators.Pop();
 				//push operator on the postfix vector
 				postFix.Push(currOperator);
 			}
@@ -649,7 +649,7 @@ namespace Wfccm2
 		{
             try
             {
-                return (double)variables[token];
+                return variables[token];
             }
             catch
             {
@@ -719,7 +719,7 @@ namespace Wfccm2
 			string token = "";
 			for (int i = 0; i < func.Length; i++)
 			{
-				token = (string) func[i];
+				token = func[i];
 
 				// If the current string is an operator
 				if (this.IsOperator(token))
@@ -804,7 +804,7 @@ namespace Wfccm2
 			string token = "";
             for (int i = 0, numCount = this.splitPostFunction.Length; i < numCount; i++)
 			{
-                token = (string)this.splitPostFunction[i];
+                token = this.splitPostFunction[i];
 
 				// If the current string is an operator
 				if (this.IsOperator(token))
@@ -816,7 +816,7 @@ namespace Wfccm2
 						token == "sign")
 					{
 						// Get right operand
-						sLeft = (string) workstack.Pop();
+						sLeft = workstack.Pop();
 
 						// Convert the operands
 						dLeft = this.ConvertString(sLeft);	
@@ -825,10 +825,10 @@ namespace Wfccm2
 					else
 					{
 						// Get right operand
-						sRight = (string) workstack.Pop();
+						sRight = workstack.Pop();
 
 						// Get left operand
-						sLeft = (string) workstack.Pop();
+						sLeft = workstack.Pop();
 
 						// Convert the operands
 						dLeft = this.ConvertString(sLeft);
@@ -923,7 +923,7 @@ namespace Wfccm2
 
 			// Check to see if the value on the back is a variable.
 
-			return this.ConvertString((string)workstack.Peek());
+			return this.ConvertString(workstack.Peek());
 		}
 
 		/// <summary>
@@ -938,7 +938,7 @@ namespace Wfccm2
 		{
             try
             {
-                return (double)variables[token];
+                return variables[token];
             }
             catch
             {
@@ -1018,7 +1018,7 @@ namespace Wfccm2
 			string token = "";
 			for (int i = 0; i < func.Length;i++)
 			{
-				token = (string) func[i];
+				token = func[i];
 
 				// If the current string is an operator
 				if (this.IsOperator(token))
@@ -1029,7 +1029,7 @@ namespace Wfccm2
 						token == "neg")
 					{
 						// Get right operand
-						sLeft = (string) workstack.Pop();
+						sLeft = workstack.Pop();
 
 						// Convert the operands
 						dLeft = this.ConvertString(sLeft);	
@@ -1038,10 +1038,10 @@ namespace Wfccm2
 					else
 					{
 						// Get right operand
-						sRight = (string) workstack.Pop();
+						sRight = workstack.Pop();
 
 						// Get left operand
-						sLeft = (string) workstack.Pop();
+						sLeft = workstack.Pop();
 
 						// Convert the operands
 						dLeft = this.ConvertString(sLeft);
@@ -1173,9 +1173,9 @@ namespace Wfccm2
 			//	else 
 			//		return false;
 
-			if (this.ConvertString((string)workstack.Peek()) == TRUE)
+			if (this.ConvertString(workstack.Peek()) == TRUE)
 				return true;
-//			if (this.ConvertString((string)workstack.Peek()) == FALSE)
+//			if (this.ConvertString(workstack.Peek()) == FALSE)
 			return false;
 		}
 
