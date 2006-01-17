@@ -39,11 +39,11 @@ namespace Wfccm2
         //protected AppDomain NewAppDomain;
 
 		#region Class variable
-		class Variable
-		{
-			public string name;
-			public double val;
-		}
+        //class Variable
+        //{
+        //    public string name;
+        //    public double val;
+        //}
 		#endregion
 
 		#region Member data
