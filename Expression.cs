@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Threading;
+using System.Collections.ObjectModel;
 
 namespace Wfccm2
 {
@@ -612,7 +613,7 @@ namespace Wfccm2
             */
 		}
 
-		public List<string> GetFunctionVariables()
+        public ReadOnlyCollection<string> GetFunctionVariables()
 		{
 			// Check to see that the function is valid.
 			if (inFunction.Equals("") || inFunction == null)
@@ -634,7 +635,7 @@ namespace Wfccm2
 					retVal.Add(token);
 			}
 
-			return retVal;
+			return retVal.AsReadOnly();
 		}
 
 		/// <summary>
