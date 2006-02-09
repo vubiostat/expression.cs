@@ -613,29 +613,32 @@ namespace Wfccm2
             */
 		}
 
-        public ReadOnlyCollection<string> GetFunctionVariables()
+        public ReadOnlyCollection<string> FunctionVariables
 		{
-			// Check to see that the function is valid.
-			if (inFunction.Equals("") || inFunction == null)
-				throw new Exception("Function does not exist");
+            get
+            {
+                // Check to see that the function is valid.
+                if (inFunction.Equals("") || inFunction == null)
+                    throw new Exception("Function does not exist");
 
-			// Expand the function.
-			string func = this.Expand(inFunction);
+                // Expand the function.
+                string func = this.Expand(inFunction);
 
-			// Tokenize the funcion.
-			string[] inFix = func.Split(new char[]{' '});
+                // Tokenize the funcion.
+                string[] inFix = func.Split(new char[] { ' ' });
 
-			// The arraylist to return
-            List<string> retVal = new List<string>();
+                // The arraylist to return
+                List<string> retVal = new List<string>();
 
-			// Check each token to see if its a variable.
-			foreach (string token in inFix)
-			{
-				if (this.IsVariable(token))
-					retVal.Add(token);
-			}
+                // Check each token to see if its a variable.
+                foreach (string token in inFix)
+                {
+                    if (this.IsVariable(token))
+                        retVal.Add(token);
+                }
 
-			return retVal.AsReadOnly();
+                return retVal.AsReadOnly();
+            }
 		}
 
 		/// <summary>
