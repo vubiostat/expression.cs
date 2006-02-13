@@ -33,8 +33,8 @@ namespace Wfccm2
         [Serializable()]
         public abstract class DynamicFunction
         {
-            public abstract double EvaluateD(SortedDictionary<string, double> variables);
-            public abstract bool EvaluateB(SortedDictionary<string, double> variables);
+            public abstract double EvaluateD(IDictionary<string, double> variables);
+            public abstract bool EvaluateB(IDictionary<string, double> variables);
         }
         protected DynamicFunction dynamicFunction;
         //protected AppDomain NewAppDomain;
