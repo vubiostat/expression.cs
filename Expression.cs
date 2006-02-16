@@ -54,7 +54,7 @@ namespace Wfccm2
 		/// </summary>
 		protected string inFunction = ""; // Infix function.
 		protected string postFunction = ""; // Postfix function.
-        protected SortedDictionary<string, double> variables = new SortedDictionary<string, double>();
+        protected Dictionary<string, double> variables = new Dictionary<string, double>();
 		protected const double TRUE = 1;
 		protected const double FALSE = 0;
         protected string[] splitPostFunction;
@@ -1258,7 +1258,7 @@ namespace Wfccm2
 
             // Define "EvaluateD" function.
             //
-            Type[] args = { typeof(SortedDictionary<string, double>) };
+            Type[] args = { typeof(Dictionary<string, double>) };
             MethodBuilder evalMethodD = dynamicFunctionClass.DefineMethod(
                 "EvaluateD",
                 MethodAttributes.Public | MethodAttributes.Virtual,
