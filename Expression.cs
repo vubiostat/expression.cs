@@ -52,8 +52,8 @@ namespace Wfccm2
 		/// <summary>
 		/// The function.
 		/// </summary>
-		protected string inFunction = ""; // Infix function.
-		protected string postFunction = ""; // Postfix function.
+		protected string inFunction = string.Empty; // Infix function.
+		protected string postFunction = string.Empty; // Postfix function.
         protected Dictionary<string, double> variables = new Dictionary<string, double>();
 		protected const double TRUE = 1;
 		protected const double FALSE = 0;
@@ -230,7 +230,7 @@ namespace Wfccm2
 			}
 
 			// Build the post fix string.
-			string psString = "";
+			string psString = string.Empty;
 			foreach (string item in postFix)
             {
 				psString = item + " " + psString;
@@ -376,7 +376,7 @@ namespace Wfccm2
 				nextCut = (nextCut == -1 ? function.Length : nextCut);
 				
 				string checkMeSpace = function.Substring(prevCut, nextCut - prevCut);
-				string checkMe = checkMeSpace.Replace(" ", "");
+				string checkMe = checkMeSpace.Replace(" ", string.Empty);
 				//Console.WriteLine(checkMe);
 
 				bool realValue=false;
@@ -546,8 +546,8 @@ namespace Wfccm2
 		/// </pre></remarks>
 		public void Clear()
 		{
-			inFunction = "";
-			postFunction = "";
+			inFunction = string.Empty;
+			postFunction = string.Empty;
 			variables.Clear();
 		}
 
@@ -618,7 +618,7 @@ namespace Wfccm2
             get
             {
                 // Check to see that the function is valid.
-                if (inFunction.Equals("") || inFunction == null)
+                if (inFunction.Equals(string.Empty) || inFunction == null)
                     throw new Exception("Function does not exist");
 
                 // Expand the function.
@@ -720,7 +720,7 @@ namespace Wfccm2
 			func = this.Infix2Postfix(inFix).Split(new char[]{' '});
 
 			// loop through the postfix vector
-			string token = "";
+			string token = string.Empty;
 			for (int i = 0; i < func.Length; i++)
 			{
 				token = func[i];
@@ -805,7 +805,7 @@ namespace Wfccm2
             //this.splitPostFunction = postFunction.Split(new char[] { ' ' });
 
 			// loop through the postfix vector
-			string token = "";
+			string token = string.Empty;
             for (int i = 0, numCount = this.splitPostFunction.Length; i < numCount; i++)
 			{
                 token = this.splitPostFunction[i];
@@ -980,7 +980,7 @@ namespace Wfccm2
 		/// <returns></returns>
 		public override string ToString()
 		{
-			string ret = "";
+			string ret = string.Empty;
 			ret += inFunction;
 			int count = 0;
             foreach (string key in variables.Keys)
@@ -1008,9 +1008,9 @@ namespace Wfccm2
 
 			// Create a temporary vector to hold the secondary stack.
             Stack<string> workstack = new Stack<string>();
-			string sLeft = "";
-			string sRight = "";
-			string sResult = "";
+			string sLeft = string.Empty;
+			string sRight = string.Empty;
+			string sResult = string.Empty;
 			double dLeft = 0;
 			double dRight = 0;
 			double dResult = 0;
@@ -1019,7 +1019,7 @@ namespace Wfccm2
 
 
 			// loop through the postfix vector
-			string token = "";
+			string token = string.Empty;
 			for (int i = 0; i < func.Length;i++)
 			{
 				token = func[i];
