@@ -337,7 +337,7 @@ namespace Wfccm2
 			// Fix negative real values. Ex:  "1 + - 2" = "1 + -2". "1 + - 2e-1" = "1 + -2e-1".
 			function = Regex.Replace(
 				function, 
-				@"([<>=/*+-] -|^-) (\d+|[0-9]+[eE][+-]\d+)(\s|$)",
+				@"([<>=/*+(-] -|sign -|^-) (\d+|[0-9]+[eE][+-]\d+)(\s|$)",
 				@"$1$2$3");
 
 			return function;
@@ -649,7 +649,7 @@ namespace Wfccm2
 		/// </pre></remarks>
 		/// <param name="token">Variable to return.</param>
 		/// <returns></returns>
-		protected double GetVariableValue(string token)
+		public double GetVariableValue(string token)
 		{
             try
             {
