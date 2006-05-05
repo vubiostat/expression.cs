@@ -114,9 +114,11 @@ namespace Wfccm2
 		{
 			get{return this.inFunction;}
 			set{
-				if(!this.Validate(value))
-					return;
-				this.inFunction = value; 
+                // This will throw an error if it does not validate.
+                this.Validate(value);
+
+                // Function is valid.
+                this.inFunction = value; 
 				this.postFunction = this.Infix2Postfix(this.inFunction);
                 this.splitPostFunction = postFunction.Split(new char[] { ' ' });
                 if (this.compilecode)
@@ -124,16 +126,27 @@ namespace Wfccm2
 			}
 		}
 
-		/// <summary>
-		/// PostFix property
-		/// </summary>
-		/// <remarks><pre>
-		/// 19 Jul 2004 - Jeremy Roberts
-		/// </pre></remarks>
-		public string PostFix
-		{
-			get{return postFunction;}
-		}
+        /// <summary>
+        /// PostFix property
+        /// </summary>
+        /// <remarks><pre>
+        /// 19 Jul 2004 - Jeremy Roberts
+        /// </pre></remarks>
+        public string PostFix
+        {
+            get { return postFunction; }
+        }
+
+        /// <summary>
+        /// PostFix property
+        /// </summary>
+        /// <remarks><pre>
+        /// 19 Jul 2004 - Jeremy Roberts
+        /// </pre></remarks>
+        public string InFix
+        {
+            get { return this.Expand(inFunction); }
+        }
 
         public bool Compile
         {
@@ -455,33 +468,8 @@ namespace Wfccm2
 		/// <param name="value">Variabale value.</param>
 		public void AddSetVariable(string name, double val)
 		{
-            try
-            {
-                variables[name] = val;
-            }
-            catch
-            {
-                variables.Add(name, val);
-            }
-            /*
-			// Check to see if the variable has been added.
-			foreach (Variable thisVar in variables)
-			{
-				// if the value is already set, change the value.
-				if (thisVar.name == name)
-				{
-					thisVar.val = val;
-					return;
-				}
-			}
-
-			Variable var = new Variable();
-			var.name = name;
-			var.val = val;
-			variables.Add(var);
-			return;
-            */
-		}
+            variables[name] = val;
+        }
 
 		/// <summary>
 		/// Adds or sets a Variable.
@@ -499,33 +487,8 @@ namespace Wfccm2
             else
                 dval = 0;
 
-            try
-            {
-                variables[name] = dval;
-            }
-            catch
-            {
-                variables.Add(name, dval);
-            }
-            /*
-			// Check to see if the variable has been added.
-			foreach (Variable thisVar in variables)
-			{
-				// if the value is already set, change the value.
-				if (thisVar.name == name)
-				{
-					thisVar.val = val ? TRUE : FALSE;
-					return;
-				}
-			}
-
-			Variable var = new Variable();
-			var.name = name;
-			var.val = val ? TRUE : FALSE;
-			variables.Add(var);
-			return;
-            */
-		}
+            variables[name] = dval;
+        }
 
 		/// <summary>
 		/// Clears the variable information.
@@ -586,32 +549,18 @@ namespace Wfccm2
 		/// </pre></remarks>
 		/// <param name="token">String to check.</param>
 		/// <returns></returns>
-		protected bool InVariablList(string token)
-		{
-            try
-            {
-                object o = variables[token];
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-
-            /*
-			// Loop through the variable list.
-			foreach (Variable var in variables)
-			{
-				//dubug
-				//string temp = iVariables->name;
-				//dubug
-				if (var.name == token)
-					return true;
-			}
-
-			return false;
-            */
-		}
+        //protected bool InVariablList(string token)
+        //{
+        //    try
+        //    {
+        //        object o = variables[token];
+        //        return true;
+        //    }
+        //    catch
+        //    {
+        //        return false;
+        //    }
+        //}
 
         public ReadOnlyCollection<string> FunctionVariables
 		{
