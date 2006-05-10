@@ -74,9 +74,9 @@ namespace Wfccm2
 		/// <remarks><pre>
 		/// 20 Jul 2004 - Jeremy Roberts
 		/// </pre></remarks>
-		public Expression()
-		{
-		}
+        public Expression()
+        {
+        }
 
 		/// <summary>
 		/// Creation constructor.
@@ -99,7 +99,11 @@ namespace Wfccm2
 		/// <param name="function">The function to be evaluated.</param>
 		public Expression(Expression cloneMe)
 		{
-			// TODO!: Fill in the rest of the copy constructor
+            this.Function = cloneMe.Function;
+            foreach (string key in cloneMe.variables.Keys)
+            {
+                this.AddSetVariable(key, (double)cloneMe.variables[key]);
+            }
 		}
 		#endregion
 
