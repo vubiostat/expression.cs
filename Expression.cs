@@ -22,7 +22,7 @@ namespace Wfccm2
     ///  - Added generic collection implementation.
     /// </pre></remarks>
     [Serializable()]
-	public class Expression
+    public class Expression : MarshalByRefObject
 	{
         /// <summary>
         /// Dynaamic function type.
@@ -33,8 +33,8 @@ namespace Wfccm2
         [Serializable()]
         public abstract class DynamicFunction
         {
-            public abstract double EvaluateD(IDictionary<string, double> variables);
-            public abstract bool EvaluateB(IDictionary<string, double> variables);
+            public abstract double EvaluateD(Dictionary<string, double> variables);
+            public abstract bool EvaluateB(Dictionary<string, double> variables);
         }
         protected DynamicFunction dynamicFunction;
         //protected AppDomain NewAppDomain;
@@ -1234,11 +1234,11 @@ namespace Wfccm2
 
             // Create an object to use.
             //
-            //Type dt = dynamicFunctionClass.CreateType();
-            assembly.Save("assem.dll");
+            Type dt = dynamicFunctionClass.CreateType();
+            //assembly.Save("assem.dll");
             //assembly.Save("x.exe");
             //return (function)Activator.CreateInstance(dt, new Object[] { });
-            //this.dynamicFunction = (DynamicFunction)Activator.CreateInstance(dt, new Object[] { });
+            this.dynamicFunction = (DynamicFunction)Activator.CreateInstance(dt, new Object[] { });
         }
 
         
@@ -1524,9 +1524,9 @@ namespace Wfccm2
                     ilGen.Emit(OpCodes.Ldarg_1);
                     ilGen.Emit(OpCodes.Ldstr, token);
                     ilGen.EmitCall(OpCodes.Callvirt,
-                        typeof(System.Collections.Hashtable).GetMethod("get_Item"),
+                        typeof(System.Collections.Generic.Dictionary<string, double>).GetMethod("get_Item"),
                         null);
-                    ilGen.Emit(OpCodes.Unbox_Any, typeof(System.Double));
+                    //ilGen.Emit(OpCodes.Unbox_Any, typeof(System.Double));
                 }
                 else if (token.Equals("true"))
                 {
