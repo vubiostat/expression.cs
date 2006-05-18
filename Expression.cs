@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Threading;
 using System.Collections.ObjectModel;
+using System.Text;
 
 namespace Wfccm2
 {
@@ -125,6 +126,7 @@ namespace Wfccm2
                 this.inFunction = value; 
 				this.postFunction = this.Infix2Postfix(this.inFunction);
                 this.splitPostFunction = postFunction.Split(new char[] { ' ' });
+                this.ClearVariables();
                 if (this.compilecode)
                     this.compile();
 			}
@@ -933,15 +935,18 @@ namespace Wfccm2
 		/// <returns></returns>
 		public override string ToString()
 		{
-			string ret = string.Empty;
-			ret += inFunction;
+            StringBuilder ret = new StringBuilder();
+			ret.Append(inFunction);
 			int count = 0;
-            foreach (string key in variables.Keys)
+            foreach (KeyValuePair<string,double> keyval in variables)
             {
-                if (count++ == 0) ret += "; "; else ret += ", ";
-                ret += key + "=" + variables[key];
+                if (count++ == 0)
+                    ret.Append("; ");
+                else
+                    ret.Append(", ");
+                ret.Append(keyval.Key + "=" + keyval.Value);
             }
-			return ret;
+			return ret.ToString();
 		}
 
 
