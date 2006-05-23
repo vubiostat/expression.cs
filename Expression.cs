@@ -90,21 +90,21 @@ namespace Wfccm2
             this.Function = function;
 		}
 
-		/// <summary>
-		/// Copy constructor.
-		/// </summary>
-		/// <remarks><pre>
-		/// 19 Jul 2004 - Jeremy Roberts
-		/// </pre></remarks>
-		/// <param name="function">The function to be evaluated.</param>
-		public Expression(Expression cloneMe)
-		{
-            this.Function = cloneMe.Function;
-            foreach (string key in cloneMe.variables.Keys)
-            {
-                this.AddSetVariable(key, (double)cloneMe.variables[key]);
-            }
-		}
+        ///// <summary>
+        ///// Copy constructor.
+        ///// </summary>
+        ///// <remarks><pre>
+        ///// 19 Jul 2004 - Jeremy Roberts
+        ///// </pre></remarks>
+        ///// <param name="function">The function to be evaluated.</param>
+        //public Expression(Expression cloneMe)
+        //{
+        //    this.Function = cloneMe.Function;
+        //    foreach (string key in cloneMe.variables.Keys)
+        //    {
+        //        this.AddSetVariable(key, (double)cloneMe.variables[key]);
+        //    }
+        //}
 		#endregion
 
 		#region properties
