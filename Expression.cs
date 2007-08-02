@@ -573,7 +573,7 @@ namespace Wfccm2
             get
             {
                 // Check to see that the function is valid.
-                if (inFunction.Equals(string.Empty) || inFunction == null)
+                if (this.inFunction.Equals(string.Empty) || this.inFunction == null)
                     throw new Exception("Function does not exist");
 
                 // Expand the function.
