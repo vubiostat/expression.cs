@@ -1,7 +1,3 @@
-/*****************************************************************************************
-* Jeremy Roberts                                                           Expression.cs *
-* 23 Jul 2004                                                                     Wfccm2 *
-*****************************************************************************************/
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -49,10 +45,6 @@ namespace Wfccm2
         #endregion
 
         #region Member data
-        
-        /// <summary>
-        /// The function.
-        /// </summary>
         protected string inFunction = string.Empty; // Infix function.
         protected string postFunction = string.Empty; // Postfix function.
         protected Dictionary<string, double> variables = new Dictionary<string, double>();
@@ -60,7 +52,6 @@ namespace Wfccm2
         protected const double FALSE = 0;
         protected string[] splitPostFunction;
         private bool compilecode = false;
-
         #endregion
 
         ~Expression()
@@ -117,13 +108,13 @@ namespace Wfccm2
         /// </pre></remarks>
         public string Function
         {
-            get{return this.inFunction;}
-            set{
+            get { return this.inFunction; }
+            set {
                 // This will throw an error if it does not validate.
                 this.Validate(value);
 
                 // Function is valid.
-                this.inFunction = value; 
+                this.inFunction = value;
                 this.postFunction = this.Infix2Postfix(this.inFunction);
                 this.splitPostFunction = postFunction.Split(new char[] { ' ' });
                 this.ClearVariables();
@@ -156,17 +147,10 @@ namespace Wfccm2
 
         public bool Compile
         {
-            get
-            {
-                return this.compilecode;
-            }
-            set
-            {
-                this.compilecode = value;
-            }
+            get { return this.compilecode; }
+            set { this.compilecode = value; }
         }
         #endregion
-
 
         /// <summary>
         /// Convecs an infix string to a post fix string.
@@ -183,7 +167,7 @@ namespace Wfccm2
             string[] inFix = func.Split(new char[]{' '});
 
             Stack<string> postFix = new Stack<string>();
-    
+
             //          inFix = evaluateLogic(inFix);
 
             Stack<string> operators = new Stack<string>();
@@ -197,16 +181,15 @@ namespace Wfccm2
                     //push on the postfix vector
                     postFix.Push(token);
                 }
-                    // If the token is a "("
+                // If the token is a "("
                 else if (token == "(")
                 {
                     //push on the operatorVector
                     operators.Push(token);
                 }
-                    // If the token is a ")"
+                // If the token is a ")"
                 else if (token == ")")
                 {
-            
                     // pop the operatorVector and store operator
                     currOperator = operators.Pop();
 
@@ -219,10 +202,10 @@ namespace Wfccm2
                         currOperator = operators.Pop();
                     }
                 }
-                    // If the token is an operator
+                // If the token is an operator
                 else if (this.IsOperator(token))
                 {
-                    // while precedence of the operator is <= precedence of the token 
+                    // while precedence of the operator is <= precedence of the token
                     while (operators.Count > 0)
                     {
                         if (this.GetPrecedence(token) <= this.GetPrecedence(operators.Peek()))
@@ -255,10 +238,8 @@ namespace Wfccm2
                 psString = item + " " + psString;
             }
             psString = psString.Trim();
- 
+
             return psString;
-
-
         }
 
         /// <summary>
@@ -277,7 +258,7 @@ namespace Wfccm2
                 token != "{" &&
                 token != "}")
                 return true;
-            else 
+            else
                 return false;
         }
 
@@ -320,7 +301,6 @@ namespace Wfccm2
         /// </pre></remarks>
         /// <param name="function">Function to expand.</param>
         /// <returns></returns>
-
         public string Expand(string function)
         {
             // Clean the function.
@@ -353,7 +333,7 @@ namespace Wfccm2
 
             // Fix negative real values. Ex:  "1 + - 2" = "1 + -2". "1 + - 2e-1" = "1 + -2e-1".
             function = Regex.Replace(
-                function, 
+                function,
                 @"([<>=/*+(-] -|sign -|^-) (\d+|[0-9]+[eE][+-]\d+)(\s|$)",
                 @"$1$2$3");
 
@@ -375,26 +355,26 @@ namespace Wfccm2
                 // Find the previous space.
                 int prevCut=-1;
                 int nextCut=-1;
-                
+
                 if (n-2 <= 0)
                     prevCut = 0;
                 else
                     prevCut = function.LastIndexOf(" ", n-2, n-2) + 1;
                 //prevCut = n-2 <= 0 ? 0 : function.LastIndexOf(" ", n-2, n-2) + 1;
                 //prevSpace = function.LastIndexOf(" ", n-2, n-2);
-                
+
                 if (n + 2 < function.Length)
                     nextCut = function.IndexOf(" ", n+2);
-                else 
+                else
                     nextCut = function.Length;
                 nextCut = (nextCut == -1 ? function.Length : nextCut);
-                
+
                 string checkMeSpace = function.Substring(prevCut, nextCut - prevCut);
                 string checkMe = checkMeSpace.Replace(" ", string.Empty);
 
                 bool realValue=false;
                 double val = Double.NaN;
-                try 
+                try
                 {
                     val = Double.Parse(checkMe);
                     realValue = true;
@@ -414,8 +394,6 @@ namespace Wfccm2
 
             return function;
         }
-
-
 
         /// <summary>
         /// Returns the precedance of an operator.
@@ -448,7 +426,7 @@ namespace Wfccm2
                 token == "^" )
                 return 3;
             else if (
-                token == "abs" || 
+                token == "abs" ||
                 token == "neg")
                 return 4;
             else
@@ -582,7 +560,7 @@ namespace Wfccm2
             }
             catch
             {
-                return double.NaN;                
+                return double.NaN;
             }
         }
 
@@ -594,7 +572,6 @@ namespace Wfccm2
             // Check parenthesis
             int parCount = 0;
             for ( int i = 0; i < func.Length; i++){
-
                 // Make sure the abs function is formatted correctly.
                 if (func[i] == "abs")
                 {
@@ -627,7 +604,6 @@ namespace Wfccm2
                 // TODO: Make the exception better.
                 throw new Exception("Parenthesis error! No matching closeing parenthesis." + " " + inFix);
 
-
             // Check operators
 
             // Create a temporary vector to hold the secondary stack.
@@ -643,7 +619,6 @@ namespace Wfccm2
                 // If the current string is an operator
                 if (this.IsOperator(token))
                 {
-    
                     if (token == "abs" ||
                         token == "neg" ||
                         token == "sign")
@@ -658,7 +633,6 @@ namespace Wfccm2
                             throw new Exception("Operator error! \"" + token + "\". " + inFix);
                         }
                     }
-                
                     else
                     {
                         try
@@ -672,10 +646,8 @@ namespace Wfccm2
                             throw new Exception("Operator error! \"" + token + "\". " + inFix);
                         }
                     }
-    
                 }
-                    // else
-                else 
+                else
                 {
                     // push the string on the workstack
                     workstack.Push(token);
@@ -683,9 +655,8 @@ namespace Wfccm2
             }
 
             // Check to see if the value on the back is a variable.
+            //return convertString((string)workstack.Peek());
 
-            //return convertString((string)workstack.Peek());           
-            
             return true;
         }
 
@@ -722,7 +693,7 @@ namespace Wfccm2
                 // If the current string is an operator
                 if (this.IsOperator(token))
                 {
-                    // Single operand operators. 
+                    // Single operand operators.
                     if (token == "abs" ||
                         token == "neg" ||
                         token == "sign")
@@ -731,7 +702,7 @@ namespace Wfccm2
                         sLeft = workstack.Pop();
 
                         // Convert the operands
-                        dLeft = this.ConvertString(sLeft);  
+                        dLeft = this.ConvertString(sLeft);
                     }
                     // Double operand operators
                     else
@@ -747,7 +718,7 @@ namespace Wfccm2
                         dRight = this.ConvertString(sRight);
                     }
 
-                    // call the operator 
+                    // call the operator
                     switch (token)
                     {
                     case "+":
@@ -767,7 +738,7 @@ namespace Wfccm2
 
                     case "/":
                         // Divide the operands
-                        if (dRight == 0) 
+                        if (dRight == 0)
                             dResult = double.NaN;
                         else
                             dResult = dLeft / dRight;
@@ -797,7 +768,7 @@ namespace Wfccm2
                     // Push the result on the stack
                     workstack.Push(dResult.ToString());
                 }
-                else 
+                else
                 {
                     // push the string on the workstack
                     workstack.Push(token);
@@ -805,7 +776,6 @@ namespace Wfccm2
             }
 
             // Check to see if the value on the back is a variable.
-
             return this.ConvertString(workstack.Peek());
         }
 
@@ -843,7 +813,7 @@ namespace Wfccm2
                 return TRUE;
             else if (token == "false")
                 return FALSE;
-            else 
+            else
                 // Convert the operand
                 return double.Parse(token);
             */
@@ -873,7 +843,6 @@ namespace Wfccm2
             return ret.ToString();
         }
 
-
         /// <summary>
         /// Evaluates the function given as a boolean expression.
         /// </summary>
@@ -884,7 +853,6 @@ namespace Wfccm2
         {
             if (dynamicFunction != null)
                 return dynamicFunction.EvaluateB(variables);
-
 
             // TODO! Check to see that we have the variable that we need.
 
@@ -899,7 +867,6 @@ namespace Wfccm2
 
             string[] func = postFunction.Split(new char[]{' '});
 
-
             // loop through the postfix vector
             string token = string.Empty;
             for (int i = 0; i < func.Length;i++)
@@ -909,8 +876,7 @@ namespace Wfccm2
                 // If the current string is an operator
                 if (this.IsOperator(token))
                 {
-
-                    // Single operand operators. 
+                    // Single operand operators.
                     if (token == "abs" ||
                         token == "neg")
                     {
@@ -918,9 +884,9 @@ namespace Wfccm2
                         sLeft = workstack.Pop();
 
                         // Convert the operands
-                        dLeft = this.ConvertString(sLeft);  
+                        dLeft = this.ConvertString(sLeft);
                     }
-                        // Double operand operators
+                    // Double operand operators
                     else
                     {
                         // Get right operand
@@ -934,16 +900,14 @@ namespace Wfccm2
                         dRight = this.ConvertString(sRight);
                     }
 
-
-        
-                    // call the operator 
+                    // call the operator
                     switch (token)
                     {
                     case "<=":
                         // Make the comparison.
                         if (dLeft <= dRight)
                             sResult = "true";
-                        else 
+                        else
                             sResult = "false";
                         break;
 
@@ -951,7 +915,7 @@ namespace Wfccm2
                         // Make the comparison.
                         if (dLeft < dRight)
                             sResult = "true";
-                        else 
+                        else
                             sResult = "false";
                         break;
 
@@ -959,7 +923,7 @@ namespace Wfccm2
                         // Make the comparison.
                         if (dLeft >= dRight)
                             sResult = "true";
-                        else 
+                        else
                             sResult = "false";
                         break;
 
@@ -967,7 +931,7 @@ namespace Wfccm2
                         // Make the comparison.
                         if (dLeft > dRight)
                             sResult = "true";
-                        else 
+                        else
                             sResult = "false";
                         break;
 
@@ -976,7 +940,7 @@ namespace Wfccm2
                         // Make the comparison.
                         if (dLeft == dRight)
                             sResult = "true";
-                        else 
+                        else
                             sResult = "false";
                         break;
 
@@ -984,7 +948,7 @@ namespace Wfccm2
                         // Make the comparison.
                         if (dLeft != dRight)
                             sResult = "true";
-                        else 
+                        else
                             sResult = "false";
                         break;
 
@@ -992,7 +956,7 @@ namespace Wfccm2
                         // OR the operands.
                         if (dRight == TRUE || dLeft == TRUE)
                             sResult = "true";
-                        else 
+                        else
                             sResult = "false";
                         break;
 
@@ -1000,7 +964,7 @@ namespace Wfccm2
                         // AND the operands
                         if (dRight == TRUE && dLeft == TRUE)
                             sResult = "true";
-                        else 
+                        else
                             sResult = "false";
                         break;
 
@@ -1019,27 +983,22 @@ namespace Wfccm2
 
                     // Push the result on the stack
                     workstack.Push(sResult);
-
                 }
-                    // else
-                else 
+                else
                 {
-
                     // push the string on the workstack
                     workstack.Push(token);
-
                 }
-        
             }
 
-            //  if (workstack.back() == "true")
-            //      return true;
-            //  else 
-            //      return false;
+            //if (workstack.back() == "true")
+            //    return true;
+            //else
+            //    return false;
 
             if (this.ConvertString(workstack.Peek()) == TRUE)
                 return true;
-//          if (this.ConvertString(workstack.Peek()) == FALSE)
+            //if (this.ConvertString(workstack.Peek()) == FALSE)
             return false;
         }
 
@@ -1053,12 +1012,12 @@ namespace Wfccm2
         /// <returns>True if is a number, false otherwise.</returns>
         protected bool IsNumber(string token)
         {
-            try 
+            try
             {
                 double.Parse(token);
                 return true;
             }
-            catch 
+            catch
             {
                 return false;
             }
@@ -1071,7 +1030,7 @@ namespace Wfccm2
         /// <remarks><pre>
         /// 20 Dec 2005 - Jeremy Roberts
         /// </pre></remarks>
-        protected void compile() 
+        protected void compile()
         {
             // Code to set up the object.
 
@@ -1148,8 +1107,7 @@ namespace Wfccm2
             this.dynamicFunction = (DynamicFunction)Activator.CreateInstance(dt, new Object[] { });
         }
 
-        
-        protected void emitFunction(string function, ILGenerator ilGen) 
+        protected void emitFunction(string function, ILGenerator ilGen)
         {
             string[] splitFunction = function.Split(new char[] { ' ' });
 
@@ -1157,13 +1115,12 @@ namespace Wfccm2
             ilGen.DeclareLocal(typeof(System.Double));
             ilGen.DeclareLocal(typeof(System.Double));
 
-
             foreach (string token in splitFunction)
             {
                 // If the current string is an operator
                 if (this.IsOperator(token))
                 {
-                    // call the operator 
+                    // call the operator
                     switch (token)
                     {
                     case "+":
@@ -1444,6 +1401,6 @@ namespace Wfccm2
             }
             ilGen.Emit(OpCodes.Ret);
         }
-        
+
     }
 }
